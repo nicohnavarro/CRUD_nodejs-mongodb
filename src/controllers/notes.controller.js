@@ -11,13 +11,12 @@ notesCtrl.createNewNote = async(req, res) => {
     const newNote = new Note({ title, description });
     await newNote.save()
     console.log(newNote);
-    res.send('added note');
+    res.redirect('/notes');
 };
 
 notesCtrl.renderNotes = async(req, res) => {
     const notes = await Note.find();
     res.render('notes/all-notes', { notes });
-    //res.send('render notes');
 };
 
 notesCtrl.renderEditForm = (req, res) => {
@@ -28,8 +27,10 @@ notesCtrl.updateNote = (req, res) => {
     res.send('updated note');
 };
 
-notesCtrl.deleteNote = (req, res) => {
-    res.send('delete note');
+notesCtrl.deleteNote = async(req, res) => {
+    console.log(req.params.id);
+    await Note.findByIdAndDelete(req.params.id);
+    res.redirect('/notes');
 };
 
 module.exports = notesCtrl;
